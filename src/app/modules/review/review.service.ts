@@ -1,4 +1,7 @@
-import { TReview } from './review.interface';
+/* eslint-disable no-undef */
+/* eslint-disable no-prototype-builtins */
+import { Course } from '../course/course.model';
+import { ReviewDocument, TReview } from './review.interface';
 import { Review } from './review.model';
 
 const createReviewIntoDB = async (Data: TReview) => {
@@ -6,6 +9,55 @@ const createReviewIntoDB = async (Data: TReview) => {
   return result;
 };
 
+const getBestReviewFromDB = async () => {
+  const reviews: ReviewDocument[] = await Review.find();
+
+  const averageRatingsObj: Record<string, { total: number; count: number }> =
+    {};
+
+  for (let i = 0; i < reviews.length; i++) {
+    const item = reviews[i];
+    const { courseId, rating } = item;
+
+    if (!averageRatingsObj[courseId]) {
+      averageRatingsObj[courseId] = { total: 0, count: 0 };
+    }
+
+    averageRatingsObj[courseId].total += rating;
+    averageRatingsObj[courseId].count += 1;
+  }
+
+  const averageRatingsReview: Record<string, number> = {};
+
+  for (const courseId in averageRatingsObj) {
+    const { total, count } = averageRatingsObj[courseId];
+    averageRatingsReview[courseId] = total / count;
+  }
+
+  let maxCourseId: string | null = null;
+  let maxRating = -1;
+  let count = 0;
+
+  for (const courseId in averageRatingsReview) {
+    if (averageRatingsReview[courseId] > maxRating) {
+      maxRating = averageRatingsReview[courseId];
+
+      maxCourseId = courseId;
+      count = averageRatingsObj[courseId].count;
+    }
+  }
+
+  const course = await Course.findOne({ _id: maxCourseId });
+
+  const result = {
+    course,
+    averageRating: maxRating,
+    reviewCount: count,
+  };
+
+  return result;
+};
 export const ReviewService = {
   createReviewIntoDB,
+  getBestReviewFromDB,
 };

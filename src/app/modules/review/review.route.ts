@@ -11,5 +11,5 @@ router.post(
   validateRequest(reviewValidationSchema),
   ReviewControllers.createReview,
 );
-
+router.get('/api/course/best', ReviewControllers.getBestReview);
 export const ReviewRoute = router;

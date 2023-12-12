@@ -34,6 +34,28 @@ const createReview = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
+const getBestReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield review_service_1.ReviewService.getBestReviewFromDB();
+        res.status(200).json({
+            success: true,
+            statusCode: 200,
+            message: 'Best course retrieved successfully',
+            data: result,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'User not found',
+            error: {
+                code: 404,
+                description: 'User not found!',
+            },
+        });
+    }
+});
 exports.ReviewControllers = {
     createReview,
+    getBestReview,
 };

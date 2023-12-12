@@ -5,3 +5,4 @@ export type TReview = {
   rating: number;
   review: string;
 };
+export interface ReviewDocument extends TReview, Document {}

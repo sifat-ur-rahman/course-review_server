@@ -25,6 +25,28 @@ const createReview = async (req: Request, res: Response) => {
   }
 };
 
+const getBestReview = async (req: Request, res: Response) => {
+  try {
+    const result = await ReviewService.getBestReviewFromDB();
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      message: 'Best course retrieved successfully',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const ReviewControllers = {
   createReview,
+  getBestReview,
 };

@@ -10,4 +10,5 @@ const review_controller_1 = require("./review.controller");
 const review_validation_1 = __importDefault(require("./review.validation"));
 const router = express_1.default.Router();
 router.post('/api/reviews', (0, validateRequest_1.default)(review_validation_1.default), review_controller_1.ReviewControllers.createReview);
+router.get('/api/course/best', review_controller_1.ReviewControllers.getBestReview);
 exports.ReviewRoute = router;
