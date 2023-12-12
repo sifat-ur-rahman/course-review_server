@@ -41,12 +41,34 @@ const getOneCourseWithReviewFromDB = (id) => __awaiter(void 0, void 0, void 0, f
     return result;
 });
 const updateCourseFromDB = (id, updatedCourseData) => __awaiter(void 0, void 0, void 0, function* () {
-    const { details } = updatedCourseData, remainingStudentData = __rest(updatedCourseData, ["details"]);
+    const { tags, details } = updatedCourseData, remainingStudentData = __rest(updatedCourseData, ["tags", "details"]);
     const modifiedUpdatedData = Object.assign({}, remainingStudentData);
     if (details && Object.keys(details).length) {
         for (const [key, value] of Object.entries(details)) {
             modifiedUpdatedData[`details.${key}`] = value;
         }
+    }
+    if (tags && tags.length > 0) {
+        // filter out the deleted fields
+        const deletedTag = tags
+            .filter((el) => el.name && el.isDeleted)
+            .map((el) => el.name);
+        const deletedTags = yield course_model_1.Course.findByIdAndUpdate(id, {
+            $pull: {
+                tags: { name: { $in: deletedTag } },
+            },
+        }, {
+            new: true,
+            runValidators: true,
+        });
+        // filter out the new course fields
+        const newTags = tags === null || tags === void 0 ? void 0 : tags.filter((el) => el.name && !el.isDeleted);
+        const newTag = yield course_model_1.Course.findByIdAndUpdate(id, {
+            $addToSet: { tags: { $each: newTags } },
+        }, {
+            new: true,
+            runValidators: true,
+        });
     }
     const result = yield course_model_1.Course.findByIdAndUpdate(id, modifiedUpdatedData, {
         new: true,

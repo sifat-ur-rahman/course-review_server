@@ -25,7 +25,7 @@ const updateCourseFromDB = async (
   id: string,
   updatedCourseData: Partial<TCourse>,
 ): Promise<TCourse | null> => {
-  const { details, ...remainingStudentData } = updatedCourseData;
+  const { tags, details, ...remainingStudentData } = updatedCourseData;
 
   const modifiedUpdatedData: Record<string, unknown> = {
     ...remainingStudentData,
@@ -36,6 +36,41 @@ const updateCourseFromDB = async (
       modifiedUpdatedData[`details.${key}`] = value;
     }
   }
+
+  if (tags && tags.length > 0) {
+    // filter out the deleted fields
+    const deletedTag = tags
+      .filter((el) => el.name && el.isDeleted)
+      .map((el) => el.name);
+
+    const deletedTags = await Course.findByIdAndUpdate(
+      id,
+      {
+        $pull: {
+          tags: { name: { $in: deletedTag } },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    // filter out the new course fields
+    const newTags = tags?.filter((el) => el.name && !el.isDeleted);
+
+    const newTag = await Course.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { tags: { $each: newTags } },
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+  }
+
   const result = await Course.findByIdAndUpdate(id, modifiedUpdatedData, {
     new: true,
     runValidators: true,
