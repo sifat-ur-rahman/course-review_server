@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Review } from '../review/review.model';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
@@ -7,9 +8,71 @@ const createCourseIntoDB = async (Data: TCourse) => {
 
   return result;
 };
-const getAllCourseFromDB = async () => {
-  const result = await Course.find();
-  return result;
+const getAllCourseFromDB = async (query: Record<string, unknown>) => {
+  const {
+    page = 1,
+    limit = 5,
+    sortBy,
+    sortOrder,
+    minPrice,
+    maxPrice,
+    tags,
+    startDate,
+    endDate,
+    language,
+    provider,
+    durationInWeeks,
+    level,
+  } = query;
+
+  const searchTerm: any = {};
+
+  if (tags) {
+    searchTerm['tags.name'] = tags;
+  }
+  if (minPrice && maxPrice) {
+    searchTerm.price = { $gte: minPrice, $lte: maxPrice };
+  }
+
+  if (startDate && endDate) {
+    searchTerm.startDate = { $gte: startDate, $lte: endDate };
+  }
+  if (language) {
+    searchTerm.language = language;
+  }
+
+  if (provider) {
+    searchTerm.provider = provider;
+  }
+
+  if (durationInWeeks) {
+    searchTerm.durationInWeeks = durationInWeeks;
+  }
+  if (level) {
+    searchTerm['details.level'] = level;
+  }
+  const sort: any = {};
+  if (sortBy) {
+    sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+  } else {
+    sort.startDate = 1;
+  }
+  const skip = (page - 1) * limit;
+
+  const courses = await Course.find(searchTerm)
+    .sort(sort)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Course.countDocuments(searchTerm);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: courses,
+  };
 };
 const getOneCourseWithReviewFromDB = async (id: string) => {
   const course = await Course.findById(id);

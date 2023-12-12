@@ -28,7 +28,7 @@ const createCourse = async (req: Request, res: Response) => {
 
 const getAllCourse = async (req: Request, res: Response) => {
   try {
-    const result = await CourseService.getAllCourseFromDB();
+    const result = await CourseService.getAllCourseFromDB(req.query);
     res.status(200).json({
       success: true,
       statusCode: 200,

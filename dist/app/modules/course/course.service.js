@@ -21,15 +21,58 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const review_model_1 = require("../review/review.model");
 const course_model_1 = require("./course.model");
 const createCourseIntoDB = (Data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_model_1.Course.create(Data);
     return result;
 });
-const getAllCourseFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield course_model_1.Course.find();
-    return result;
+const getAllCourseFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { page = 1, limit = 5, sortBy, sortOrder, minPrice, maxPrice, tags, startDate, endDate, language, provider, durationInWeeks, level, } = query;
+    const searchTerm = {};
+    if (tags) {
+        searchTerm['tags.name'] = tags;
+    }
+    if (minPrice && maxPrice) {
+        searchTerm.price = { $gte: minPrice, $lte: maxPrice };
+    }
+    if (startDate && endDate) {
+        searchTerm.startDate = { $gte: startDate, $lte: endDate };
+    }
+    if (language) {
+        searchTerm.language = language;
+    }
+    if (provider) {
+        searchTerm.provider = provider;
+    }
+    if (durationInWeeks) {
+        searchTerm.durationInWeeks = durationInWeeks;
+    }
+    if (level) {
+        searchTerm['details.level'] = level;
+    }
+    const sort = {};
+    if (sortBy) {
+        sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    }
+    else {
+        sort.startDate = 1;
+    }
+    const skip = (page - 1) * limit;
+    const courses = yield course_model_1.Course.find(searchTerm)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+    const total = yield course_model_1.Course.countDocuments(searchTerm);
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: courses,
+    };
 });
 const getOneCourseWithReviewFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const course = yield course_model_1.Course.findById(id);

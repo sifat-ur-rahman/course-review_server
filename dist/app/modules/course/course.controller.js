@@ -36,7 +36,7 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 const getAllCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield course_service_1.CourseService.getAllCourseFromDB();
+        const result = yield course_service_1.CourseService.getAllCourseFromDB(req.query);
         res.status(200).json({
             success: true,
             statusCode: 200,
