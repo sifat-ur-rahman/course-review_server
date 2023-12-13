@@ -34,9 +34,9 @@ Endpoint: GET `/api/categories`
 
 Endpoint: POST `/api/reviews`
 
-### 6. Add New Product in Order
+### 6. Update a Course
 
-Endpoint: PUT `/api/users/:userId/orders`
+Endpoint: PUT `/api/courses/:courseId`
 
 ### 7. Retrieve all orders for a specific user
 
