@@ -18,9 +18,9 @@ If you want to run the server on your computer, run the command `tsc -w` in anot
 
 Endpoint: POST `/api/course`
 
-### 2. Retrieve a list of all users
+### 2. Get Paginated and Filtered Courses
 
-Endpoint: GET `/api/users`
+Endpoint: GET `/api/courses`
 
 ### 3. Retrieve a specific user by ID
 
