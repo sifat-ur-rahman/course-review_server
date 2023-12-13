@@ -2,7 +2,7 @@
 
 Server Live Link
 
-### https://assignment-server-l2.vercel.app/
+### https://course-review-server.vercel.app
 
 ## Run the server application locally
 
