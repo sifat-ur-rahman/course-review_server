@@ -10,17 +10,13 @@ If you want to run the server on your computer, run the command `tsc -w` in anot
 
 ## Server Documentation
 
-- This server is created to manage users and their orders.
-- New users are created here, and all users in the database can be seen.
-- Also, any user can be retrieved with a specific ID.
-- In this, the user can be deleted and updated.
-- Here you can add the orders of that user with the ID of a user, view the orders and see the total price.
+- This server is created to manage Course,Courses category and their Review.
 
 ## Server API
 
-### 1. Create a new user
+### 1. Create a Course
 
-Endpoint: POST `/api/users`
+Endpoint: POST `/api/course`
 
 ### 2. Retrieve a list of all users
 
