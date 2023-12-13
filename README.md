@@ -38,9 +38,9 @@ Endpoint: POST `/api/reviews`
 
 Endpoint: PUT `/api/courses/:courseId`
 
-### 7. Retrieve all orders for a specific user
+### 7. Get Course by ID with Reviews
 
-Endpoint: GET `/api/users/:userId/orders`
+Endpoint: GET `/api/courses/:courseId/reviews`
 
 ### 8. Calculate Total Price of Orders for a Specific User
 
