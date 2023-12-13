@@ -26,9 +26,9 @@ Endpoint: GET `/api/courses`
 
 Endpoint: POST `/api/categories`
 
-### 4. Update user information
+### 4. Get All Categories
 
-Endpoint: PUT `/api/users/:userId`
+Endpoint: GET `/api/categories`
 
 ### 5. Delete a user
 
