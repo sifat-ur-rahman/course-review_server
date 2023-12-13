@@ -22,9 +22,9 @@ Endpoint: POST `/api/course`
 
 Endpoint: GET `/api/courses`
 
-### 3. Retrieve a specific user by ID
+### 3. Create a Category
 
-Endpoint: GET `/api/users/:userId`
+Endpoint: POST `/api/categories`
 
 ### 4. Update user information
 
