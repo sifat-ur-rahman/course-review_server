@@ -24,7 +24,7 @@ const courseSchema = new mongoose_1.Schema({
     instructor: { type: String, required: true },
     categoryId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Category',
+        ref: 'category',
         required: true,
     },
     price: { type: Number, required: true },

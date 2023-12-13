@@ -21,7 +21,7 @@ const courseSchema = new Schema<TCourse, CourseModel, CourseMethods>({
   instructor: { type: String, required: true },
   categoryId: {
     type: Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: 'category',
     required: true,
   },
   price: { type: Number, required: true },
