@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseControllers = void 0;
 const course_service_1 = require("./course.service");
-const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = req.body;
         const result = yield course_service_1.CourseService.createCourseIntoDB(userData);
@@ -21,20 +21,12 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             message: 'Course created successfully',
             data: result,
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
-const getAllCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield course_service_1.CourseService.getAllCourseFromDB(req.query);
         res.status(200).json({
@@ -44,18 +36,11 @@ const getAllCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             data: result,
         });
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
-const getOneCourseWithReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getOneCourseWithReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { courseId } = req.params;
         const result = yield course_service_1.CourseService.getOneCourseWithReviewFromDB(courseId);
@@ -65,29 +50,12 @@ const getOneCourseWithReview = (req, res) => __awaiter(void 0, void 0, void 0, f
             message: 'Course and Reviews retrieved successfully',
             data: result,
         });
-        if (!result) {
-            res.status(500).json({
-                success: false,
-                message: 'User not found',
-                error: {
-                    code: 404,
-                    description: 'User not found!',
-                },
-            });
-        }
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
-const updateCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.courseId;
         const updatedCourseData = req.body;
@@ -100,15 +68,7 @@ const updateCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (err) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-            err,
-        });
+        next(err);
     }
 });
 exports.CourseControllers = {

@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { CategoryService } from './category.service';
 
-const createCategory = async (req: Request, res: Response) => {
+const createCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const categoryData = req.body;
     const result = await CategoryService.createCategoryIntoDB(categoryData);
@@ -12,20 +16,16 @@ const createCategory = async (req: Request, res: Response) => {
       message: 'Category created successfully',
       data: result,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getAllCategory = async (req: Request, res: Response) => {
+const getAllCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await CategoryService.getAllCategoryFromDB();
     res.status(200).json({
@@ -34,15 +34,8 @@ const getAllCategory = async (req: Request, res: Response) => {
       message: 'Categories retrieved successfully',
       data: result,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 

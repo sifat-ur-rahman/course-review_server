@@ -63,7 +63,8 @@ const getAllCourseFromDB = (query) => __awaiter(void 0, void 0, void 0, function
     const courses = yield course_model_1.Course.find(searchTerm)
         .sort(sort)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .exec();
     const total = yield course_model_1.Course.countDocuments(searchTerm);
     return {
         meta: {

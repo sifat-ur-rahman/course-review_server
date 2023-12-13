@@ -24,6 +24,7 @@ export type TCourse = {
   language: string;
   provider: string;
   details: TDetails;
+  durationInWeeks: number;
 };
 
 export type CourseMethods = {

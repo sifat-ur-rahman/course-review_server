@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { CourseService } from './course.service';
 
-const createCourse = async (req: Request, res: Response) => {
+const createCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userData = req.body;
 
@@ -13,20 +17,16 @@ const createCourse = async (req: Request, res: Response) => {
       message: 'Course created successfully',
       data: result,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getAllCourse = async (req: Request, res: Response) => {
+const getAllCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await CourseService.getAllCourseFromDB(req.query);
     res.status(200).json({
@@ -35,18 +35,15 @@ const getAllCourse = async (req: Request, res: Response) => {
       message: 'Courses retrieved successfully',
       data: result,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
-const getOneCourseWithReview = async (req: Request, res: Response) => {
+const getOneCourseWithReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { courseId } = req.params;
     const result = await CourseService.getOneCourseWithReviewFromDB(courseId);
@@ -57,30 +54,16 @@ const getOneCourseWithReview = async (req: Request, res: Response) => {
       message: 'Course and Reviews retrieved successfully',
       data: result,
     });
-
-    if (!result) {
-      res.status(500).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const updateCourse = async (req: Request, res: Response) => {
+const updateCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const id = req.params.courseId;
     const updatedCourseData = req.body;
@@ -96,15 +79,7 @@ const updateCourse = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-      err,
-    });
+    next(err);
   }
 };
 

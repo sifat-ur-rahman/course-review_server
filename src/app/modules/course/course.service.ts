@@ -62,7 +62,8 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
   const courses = await Course.find(searchTerm)
     .sort(sort)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .exec();
 
   const total = await Course.countDocuments(searchTerm);
   return {

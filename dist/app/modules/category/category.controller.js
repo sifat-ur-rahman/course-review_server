@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryControllers = void 0;
 const category_service_1 = require("./category.service");
-const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const categoryData = req.body;
         const result = yield category_service_1.CategoryService.createCategoryIntoDB(categoryData);
@@ -21,20 +21,12 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
             message: 'Category created successfully',
             data: result,
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
-const getAllCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield category_service_1.CategoryService.getAllCategoryFromDB();
         res.status(200).json({
@@ -44,15 +36,8 @@ const getAllCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
             data: result,
         });
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
 exports.CategoryControllers = {

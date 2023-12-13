@@ -3,6 +3,7 @@ import cors from 'cors';
 import { UserRoute } from './app/modules/course/course.route';
 import { CategoryRoute } from './app/modules/category/category.route';
 import { ReviewRoute } from './app/modules/review/review.route';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
 
 const app: Application = express();
 
@@ -30,4 +31,5 @@ app.all('*', (req: Request, res: Response) => {
   });
 });
 
+app.use(globalErrorHandler);
 export default app;

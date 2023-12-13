@@ -34,14 +34,25 @@ const courseSchema = new mongoose_1.Schema({
     language: { type: String, required: true },
     provider: { type: String, required: true },
     details: { type: DetailsSchema, required: true },
-}, {
-    toJSON: { virtuals: true },
+    durationInWeeks: { type: Number, default: 0 },
 });
-courseSchema.virtual('durationInWeeks').get(function () {
-    const CourseStartDate = new Date(this.startDate);
-    const CourseEndDate = new Date(this.endDate);
-    const durationInWeeks = Math.ceil((CourseEndDate - CourseStartDate) / (1000 * 60 * 60 * 24 * 7));
-    return durationInWeeks;
+// courseSchema.virtual('durationInWeeks').get(function () {
+//   const CourseStartDate: Date = new Date(this.startDate);
+//   const CourseEndDate: Date = new Date(this.endDate);
+//   const durationInWeeks = Math.ceil(
+//     (CourseEndDate - CourseStartDate) / (1000 * 60 * 60 * 24 * 7),
+//   );
+//   return durationInWeeks;
+// });
+courseSchema.pre('save', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const course = this;
+        const CourseStartDate = new Date(course.startDate);
+        const CourseEndDate = new Date(course.endDate);
+        course.durationInWeeks = Math.ceil((CourseEndDate - CourseStartDate) / (1000 * 60 * 60 * 24 * 7));
+        next();
+    });
 });
 courseSchema.methods.isCourseExits = function (id) {
     return __awaiter(this, void 0, void 0, function* () {

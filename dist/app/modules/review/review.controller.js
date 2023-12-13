@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewControllers = void 0;
 const review_service_1 = require("./review.service");
-const createReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const reviewData = req.body;
         const result = yield review_service_1.ReviewService.createReviewIntoDB(reviewData);
@@ -21,20 +21,12 @@ const createReview = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             message: 'Review created successfully',
             data: result,
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
-const getBestReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getBestReview = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield review_service_1.ReviewService.getBestReviewFromDB();
         res.status(200).json({
@@ -44,15 +36,8 @@ const getBestReview = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             data: result,
         });
     }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'User not found',
-            error: {
-                code: 404,
-                description: 'User not found!',
-            },
-        });
+    catch (err) {
+        next(err);
     }
 });
 exports.ReviewControllers = {

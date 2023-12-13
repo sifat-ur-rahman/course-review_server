@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ReviewService } from './review.service';
 
-const createReview = async (req: Request, res: Response) => {
+const createReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const reviewData = req.body;
     const result = await ReviewService.createReviewIntoDB(reviewData);
@@ -12,20 +16,16 @@ const createReview = async (req: Request, res: Response) => {
       message: 'Review created successfully',
       data: result,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getBestReview = async (req: Request, res: Response) => {
+const getBestReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await ReviewService.getBestReviewFromDB();
     res.status(200).json({
@@ -34,15 +34,8 @@ const getBestReview = async (req: Request, res: Response) => {
       message: 'Best course retrieved successfully',
       data: result,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
