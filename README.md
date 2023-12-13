@@ -30,9 +30,9 @@ Endpoint: POST `/api/categories`
 
 Endpoint: GET `/api/categories`
 
-### 5. Delete a user
+### 5. Create a Review
 
-Endpoint: DELETE `/api/users/:userId`
+Endpoint: POST `/api/reviews`
 
 ### 6. Add New Product in Order
 
