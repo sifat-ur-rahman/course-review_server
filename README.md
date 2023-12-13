@@ -42,6 +42,6 @@ Endpoint: PUT `/api/courses/:courseId`
 
 Endpoint: GET `/api/courses/:courseId/reviews`
 
-### 8. Calculate Total Price of Orders for a Specific User
+### 8. Get the Best Course Based on Average Review (Rating)
 
-Endpoint: GET `/api/users/:userId/orders/total-price`
+Endpoint: GET `/api/course/best`
