@@ -1,10 +1,15 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-prototype-builtins */
+import AppError from '../../errors/AppError';
 import { Course } from '../course/course.model';
 import { ReviewDocument, TReview } from './review.interface';
 import { Review } from './review.model';
 
 const createReviewIntoDB = async (Data: TReview) => {
+  const course = await Course.findById(Data.courseId);
+  if (!course) {
+    throw new AppError(400, `${Data.courseId} no course with courseId`);
+  }
   const result = await Review.create(Data);
   return result;
 };

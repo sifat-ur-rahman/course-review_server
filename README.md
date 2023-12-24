@@ -1,4 +1,4 @@
-# assignment-3 course-review_server
+# course-review_server
 
 Server Live Link
 

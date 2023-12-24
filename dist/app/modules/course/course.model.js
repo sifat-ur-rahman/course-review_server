@@ -24,7 +24,7 @@ const courseSchema = new mongoose_1.Schema({
     instructor: { type: String, required: true },
     categoryId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'category',
+        ref: 'Category',
         required: true,
     },
     price: { type: Number, required: true },
@@ -36,14 +36,6 @@ const courseSchema = new mongoose_1.Schema({
     details: { type: DetailsSchema, required: true },
     durationInWeeks: { type: Number, default: 0 },
 });
-// courseSchema.virtual('durationInWeeks').get(function () {
-//   const CourseStartDate: Date = new Date(this.startDate);
-//   const CourseEndDate: Date = new Date(this.endDate);
-//   const durationInWeeks = Math.ceil(
-//     (CourseEndDate - CourseStartDate) / (1000 * 60 * 60 * 24 * 7),
-//   );
-//   return durationInWeeks;
-// });
 courseSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         // eslint-disable-next-line @typescript-eslint/no-this-alias

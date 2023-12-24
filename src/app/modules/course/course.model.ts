@@ -6,7 +6,6 @@ import {
   TDetails,
   TTag,
 } from './course.interface';
-import AppError from '../../errors/AppError';
 
 const TagsSchema = new Schema<TTag>({
   name: { type: String },
@@ -21,7 +20,7 @@ const courseSchema = new Schema<TCourse, CourseModel, CourseMethods>({
   instructor: { type: String, required: true },
   categoryId: {
     type: Schema.Types.ObjectId,
-    ref: 'category',
+    ref: 'Category',
     required: true,
   },
   price: { type: Number, required: true },
@@ -33,15 +32,6 @@ const courseSchema = new Schema<TCourse, CourseModel, CourseMethods>({
   details: { type: DetailsSchema, required: true },
   durationInWeeks: { type: Number, default: 0 },
 });
-
-// courseSchema.virtual('durationInWeeks').get(function () {
-//   const CourseStartDate: Date = new Date(this.startDate);
-//   const CourseEndDate: Date = new Date(this.endDate);
-//   const durationInWeeks = Math.ceil(
-//     (CourseEndDate - CourseStartDate) / (1000 * 60 * 60 * 24 * 7),
-//   );
-//   return durationInWeeks;
-// });
 
 courseSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias

@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import AppError from '../../errors/AppError';
+import { Category } from '../category/category.model';
 import { Review } from '../review/review.model';
 import { TCourse } from './course.interface';
 import { Course } from './course.model';
 
 const createCourseIntoDB = async (Data: TCourse) => {
+  const category = await Category.findById(Data.categoryId);
+  if (!category) {
+    throw new AppError(400, `${Data.categoryId} no category with categoryId`);
+  }
   const result = await Course.create(Data);
 
   return result;
@@ -89,7 +95,8 @@ const updateCourseFromDB = async (
   id: string,
   updatedCourseData: Partial<TCourse>,
 ): Promise<TCourse | null> => {
-  const { tags, details, ...remainingStudentData } = updatedCourseData;
+  const { tags, details, categoryId, ...remainingStudentData } =
+    updatedCourseData;
 
   const modifiedUpdatedData: Record<string, unknown> = {
     ...remainingStudentData,
@@ -98,6 +105,13 @@ const updateCourseFromDB = async (
   if (details && Object.keys(details).length) {
     for (const [key, value] of Object.entries(details)) {
       modifiedUpdatedData[`details.${key}`] = value;
+    }
+  }
+
+  if (categoryId) {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      throw new AppError(400, `${categoryId} no category with categoryId`);
     }
   }
 

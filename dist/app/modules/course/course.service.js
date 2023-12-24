@@ -19,12 +19,21 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const AppError_1 = __importDefault(require("../../errors/AppError"));
+const category_model_1 = require("../category/category.model");
 const review_model_1 = require("../review/review.model");
 const course_model_1 = require("./course.model");
 const createCourseIntoDB = (Data) => __awaiter(void 0, void 0, void 0, function* () {
+    const category = yield category_model_1.Category.findById(Data.categoryId);
+    if (!category) {
+        throw new AppError_1.default(400, `${Data.categoryId} no category with categoryId`);
+    }
     const result = yield course_model_1.Course.create(Data);
     return result;
 });
@@ -85,11 +94,17 @@ const getOneCourseWithReviewFromDB = (id) => __awaiter(void 0, void 0, void 0, f
     return result;
 });
 const updateCourseFromDB = (id, updatedCourseData) => __awaiter(void 0, void 0, void 0, function* () {
-    const { tags, details } = updatedCourseData, remainingStudentData = __rest(updatedCourseData, ["tags", "details"]);
+    const { tags, details, categoryId } = updatedCourseData, remainingStudentData = __rest(updatedCourseData, ["tags", "details", "categoryId"]);
     const modifiedUpdatedData = Object.assign({}, remainingStudentData);
     if (details && Object.keys(details).length) {
         for (const [key, value] of Object.entries(details)) {
             modifiedUpdatedData[`details.${key}`] = value;
+        }
+    }
+    if (categoryId) {
+        const category = yield category_model_1.Category.findById(categoryId);
+        if (!category) {
+            throw new AppError_1.default(400, `${categoryId} no category with categoryId`);
         }
     }
     if (tags && tags.length > 0) {

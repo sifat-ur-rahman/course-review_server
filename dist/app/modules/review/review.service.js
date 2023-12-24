@@ -8,13 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewService = void 0;
 /* eslint-disable no-undef */
 /* eslint-disable no-prototype-builtins */
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const course_model_1 = require("../course/course.model");
 const review_model_1 = require("./review.model");
 const createReviewIntoDB = (Data) => __awaiter(void 0, void 0, void 0, function* () {
+    const course = yield course_model_1.Course.findById(Data.courseId);
+    if (!course) {
+        throw new AppError_1.default(400, `${Data.courseId} no course with courseId`);
+    }
     const result = yield review_model_1.Review.create(Data);
     return result;
 });
